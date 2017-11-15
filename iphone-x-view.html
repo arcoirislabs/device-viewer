@@ -1,0 +1,105 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="./device-styles.html">
+<dom-module id="iphone-x-view">
+    <template>
+        <style include="device-styles">
+             :host {
+                display: block;
+            }
+        </style>
+        <div class$="marvel-device iphone-x {{orientation}}" hidden$="{{visible}}">
+            <div class="notch">
+                <div class="camera"></div>
+                <div class="speaker"></div>
+            </div>
+            <div class="top-bar"></div>
+            <div class="sleep"></div>
+            <div class="bottom-bar"></div>
+            <div class="volume"></div>
+            <div class="overflow">
+                <div class="shadow shadow--tr"></div>
+                <div class="shadow shadow--tl"></div>
+                <div class="shadow shadow--br"></div>
+                <div class="shadow shadow--bl"></div>
+            </div>
+            <div class="inner-shadow"></div>
+            <div class="screen" id="ixcontainer">
+                <!-- Content goes here -->
+            </div>
+        </div>
+    </template>
+
+    <script>
+        /**
+         * `iphone-x-view`
+         * iphone-x-view element enables you to create a responsive view inside an iframe and applying skins of different devices inculding smartphones, tablets and desktop
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class IphoneXView extends Polymer.Element {
+            constructor() {
+                super();
+            }
+            static get is() {
+                return 'iphone-x-view';
+            }
+            static get properties() {
+                return {
+                    device: {
+                        type: String
+                    },
+                    visible: {
+                        type: Boolean,
+                        value: true
+                    },
+                    orientation: {
+                        type: String,
+                        observer: "_orChange"
+                    },
+                    data: {
+                        type: Object
+                    }
+                };
+            }
+            loadView(d) {
+
+                this._openScreen();
+                this.orientation = d.orientation
+                this.$.ixcontainer.innerHTML = "";
+                var i = document.createElement('iframe');
+                if (d.isUrl) {
+                    i.src = d.url;
+                } else {
+                    i.srcdoc = d.content;
+                }
+
+                i.width = 375;
+                i.height = 812;
+                this.$.ixcontainer.appendChild(i);
+
+                this.data = d;
+            }
+            _openScreen() {
+                this.visible = false;
+            }
+
+            _orChange(o) {
+                if (this.shadowRoot.querySelector('iframe') !== null) {
+                    if (o === "portrait") {
+                        this.shadowRoot.querySelector('iframe').width = 375;
+                        this.shadowRoot.querySelector('iframe').height = 812;
+                    } else {
+                        this.shadowRoot.querySelector('iframe').width = 812;
+                        this.shadowRoot.querySelector('iframe').height = 375;
+                    }
+
+                }
+            }
+
+        }
+        window.customElements.define(IphoneXView.is, IphoneXView);
+    </script>
+</dom-module>

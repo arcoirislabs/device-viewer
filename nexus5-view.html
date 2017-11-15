@@ -1,0 +1,101 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="./device-styles.html">
+<dom-module id="nexus5-view">
+    <template>
+        <style include="device-styles">
+             :host {
+                display: block;
+            }
+        </style>
+
+
+        <div class$="marvel-device nexus5 black {{orientation}}" hidden$="{{visible}}">
+            <div class="top-bar"></div>
+            <div class="sleep"></div>
+            <div class="volume"></div>
+            <div class="camera"></div>
+            <div class="screen" id="ixcontainer">
+                <!-- Content goes here -->
+            </div>
+
+
+        </div>
+
+
+
+
+    </template>
+
+    <script>
+        /**
+         * `nexus5-view`
+         * nexus5-view element enables you to create a responsive view inside an iframe and applying skins of different devices inculding smartphones, tablets and desktop
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class Nexus5View extends Polymer.Element {
+            constructor() {
+                super();
+            }
+            static get is() {
+                return 'nexus5-view';
+            }
+            static get properties() {
+                return {
+                    device: {
+                        type: String
+                    },
+                    visible: {
+                        type: Boolean,
+                        value: true
+                    },
+                    orientation: {
+                        type: String,
+                        observer: "_orChange"
+                    },
+                    data: {
+                        type: Object
+                    }
+                };
+            }
+            loadView(d) {
+
+                this._openScreen();
+                this.orientation = d.orientation
+                this.$.ixcontainer.innerHTML = "";
+                var i = document.createElement('iframe');
+                if (d.isUrl) {
+                    i.src = d.url;
+                } else {
+                    i.srcdoc = d.content;
+                }
+
+                i.width = 320;
+                i.height = 568;
+                this.$.ixcontainer.appendChild(i);
+
+                this.data = d;
+            }
+            _openScreen() {
+                this.visible = false;
+            }
+
+            _orChange(o) {
+                if (this.shadowRoot.querySelector('iframe') !== null) {
+                    if (o === "portrait") {
+                        this.shadowRoot.querySelector('iframe').width = 320;
+                        this.shadowRoot.querySelector('iframe').height = 568;
+                    } else {
+                        this.shadowRoot.querySelector('iframe').width = 568;
+                        this.shadowRoot.querySelector('iframe').height = 320;
+                    }
+
+                }
+            }
+        }
+        window.customElements.define(Nexus5View.is, Nexus5View);
+    </script>
+</dom-module>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>device-viewer demo</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../bower_components/iron-demo-helpers/demo-snippet.html">
+    <!-- <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html"> -->
+    <link rel="import" href="../device-viewer.html">
+
+    <custom-style>
+        <style is="custom-style" include="demo-pages-shared-styles">
+
+        </style>
+    </custom-style>
+</head>
+
+<body>
+    <div class="vertical-section-container centered">
+        <h3>Basic device-viewer demo</h3>
+        <!--Use auto attribute to load the deviceviewer automatically-->
+        <device-viewer id="test" url="./test.html" orientation="portrait" device-type="lumia920" auto></device-viewer>
+
+        <!-- <demo-snippet>
+            <template>
+        <device-viewer id="test"></device-viewer>
+        <script>
+          //If you changed any variables and you want to reload the content, just use this function
+          //document.querySelector('#test').reloadViewer();
+        </script>
+      </template>
+        </demo-snippet> -->
+        <script>
+            //document.querySelector('#test').loadViewer();
+            // setTimeout(function(params) {
+            //     //document.querySelector('#test').deviceType = "iphone-x";
+            //     //document.querySelector('#test').reloadViewer();
+            // }, 1000)
+
+            setTimeout(function(params) {
+                //document.querySelector('#test').deviceType = "iphone-x";
+                document.querySelector('#test').orientation = "landscape";
+                //document.querySelector('#test').loadViewer();
+                //document.querySelector('#test').reloadViewer();
+            }, 3000)
+
+            // setTimeout(function(params) {
+            //     document.querySelector('#test').deviceType = "iphone-x";
+            //     //document.querySelector('#test').loadViewer();
+            //     //document.querySelector('#test').reloadViewer();
+            // }, 7000)
+
+            //If you want to reload the content without disturbing configuration, just use this function
+            //document.querySelector('#test').reloadViewer();
+        </script>
+    </div>
+</body>
+
+</html>

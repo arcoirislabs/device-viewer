@@ -1,0 +1,103 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="./device-styles.html">
+<dom-module id="note8-view">
+    <template>
+        <style include="device-styles">
+             :host {
+                display: block;
+            }
+        </style>
+
+
+        <div class$="marvel-device note8 {{orientation}}" hidden$="{{visible}}">
+            <div class="inner"></div>
+            <div class="overflow">
+                <div class="shadow"></div>
+            </div>
+            <div class="speaker"></div>
+            <div class="sensors"></div>
+            <div class="more-sensors"></div>
+            <div class="sleep"></div>
+            <div class="volume"></div>
+            <div class="camera"></div>
+            <div class="screen" id="ixcontainer">
+                <!-- Content goes here -->
+            </div>
+        </div>
+
+
+    </template>
+
+    <script>
+        /**
+         * `note8-view`
+         * note8-view element enables you to create a responsive view inside an iframe and applying skins of different devices inculding smartphones, tablets and desktop
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class Note8View extends Polymer.Element {
+            constructor() {
+                super();
+            }
+            static get is() {
+                return 'note8-view';
+            }
+            static get properties() {
+                return {
+                    device: {
+                        type: String
+                    },
+                    visible: {
+                        type: Boolean,
+                        value: true
+                    },
+                    orientation: {
+                        type: String,
+                        observer: "_orChange"
+                    },
+                    data: {
+                        type: Object
+                    }
+                };
+            }
+            loadView(d) {
+
+                this._openScreen();
+                this.orientation = d.orientation
+                this.$.ixcontainer.innerHTML = "";
+                var i = document.createElement('iframe');
+                if (d.isUrl) {
+                    i.src = d.url;
+                } else {
+                    i.srcdoc = d.content;
+                }
+
+                i.width = 400;
+                i.height = 822;
+                this.$.ixcontainer.appendChild(i);
+
+                this.data = d;
+            }
+            _openScreen() {
+                this.visible = false;
+            }
+
+            _orChange(o) {
+                if (this.shadowRoot.querySelector('iframe') !== null) {
+                    if (o === "portrait") {
+                        this.shadowRoot.querySelector('iframe').width = 400;
+                        this.shadowRoot.querySelector('iframe').height = 822;
+                    } else {
+                        this.shadowRoot.querySelector('iframe').width = 822;
+                        this.shadowRoot.querySelector('iframe').height = 400;
+                    }
+
+                }
+            }
+        }
+        window.customElements.define(Note8View.is, Note8View);
+    </script>
+</dom-module>

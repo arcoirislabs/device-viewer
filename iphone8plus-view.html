@@ -1,0 +1,103 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="./device-styles.html">
+<dom-module id="iphone8plus-view">
+    <template>
+        <style include="device-styles">
+             :host {
+                display: block;
+            }
+        </style>
+
+
+        <div class$="marvel-device iphone8plus black {{orientation}}" hidden$="{{visible}}">
+            <div class="top-bar"></div>
+            <div class="sleep"></div>
+            <div class="volume"></div>
+            <div class="camera"></div>
+            <div class="sensor"></div>
+            <div class="speaker"></div>
+            <div class="screen" id="ixcontainer">
+                <!-- Content goes here -->
+            </div>
+            <div class="home"></div>
+            <div class="bottom-bar"></div>
+        </div>
+
+
+
+
+    </template>
+
+    <script>
+        /**
+         * `iphone8plus-view`
+         * iphone8plus-view element enables you to create a responsive view inside an iframe and applying skins of different devices inculding smartphones, tablets and desktop
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class Iphone8PlusView extends Polymer.Element {
+            constructor() {
+                super();
+            }
+            static get is() {
+                return 'iphone8plus-view';
+            }
+            static get properties() {
+                return {
+                    device: {
+                        type: String
+                    },
+                    visible: {
+                        type: Boolean,
+                        value: true
+                    },
+                    orientation: {
+                        type: String,
+                        observer: "_orChange"
+                    },
+                    data: {
+                        type: Object
+                    }
+                };
+            }
+            loadView(d) {
+
+                this._openScreen();
+                this.orientation = d.orientation
+                this.$.ixcontainer.innerHTML = "";
+                var i = document.createElement('iframe');
+                if (d.isUrl) {
+                    i.src = d.url;
+                } else {
+                    i.srcdoc = d.content;
+                }
+
+                i.width = 414;
+                i.height = 736;
+                this.$.ixcontainer.appendChild(i);
+
+                this.data = d;
+            }
+            _openScreen() {
+                this.visible = false;
+            }
+
+            _orChange(o) {
+                if (this.shadowRoot.querySelector('iframe') !== null) {
+                    if (o === "portrait") {
+                        this.shadowRoot.querySelector('iframe').width = 414;
+                        this.shadowRoot.querySelector('iframe').height = 736;
+                    } else {
+                        this.shadowRoot.querySelector('iframe').width = 736;
+                        this.shadowRoot.querySelector('iframe').height = 414;
+                    }
+
+                }
+            }
+        }
+        window.customElements.define(Iphone8PlusView.is, Iphone8PlusView);
+    </script>
+</dom-module>

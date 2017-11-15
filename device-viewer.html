@@ -1,0 +1,267 @@
+<!-- <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-pages/iron-pages.html">-->
+<link rel="import" href="./bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="./device-styles.html">
+<dom-module id="device-viewer">
+    <template>
+    <style include="device-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <iron-pages selected="{{deviceType}}" attr-for-selected="name" fallback-selection="iphone5s">
+      <iphone-x-view name="iphone-x"></iphone-x-view>
+      <iphone5s-view name="iphone5s"></iphone5s-view>
+      <note8-view name="note8"></note8-view>
+      <iphone8-view name="iphone8"></iphone8-view>
+      <iphone8plus-view name="iphone8plus"></iphone8plus-view>
+      <iphone5c-view name="iphone5c"></iphone5c-view>
+      <ipad-view name="ipad"></ipad-view>
+      <iphone4s-view name="iphone4s"></iphone4s-view>
+      <nexus5-view name="nexus5"></nexus5-view>
+      <lumia920-view name="lumia920"></lumia920-view>
+      <section></section>
+      <section></section>
+    </iron-pages>
+
+  </template>
+
+    <script>
+        /**
+         * `device-viewer`
+         * device-viewer element enables you to create a responsive view inside an iframe and applying skins of different devices inculding smartphones, tablets and desktop
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class DeviceViewer extends Polymer.Element {
+            constructor() {
+                super();
+            }
+            static get is() {
+                return 'device-viewer';
+            }
+            static get properties() {
+                return {
+                    visible: {
+                        type: Boolean,
+                        value: false
+                    },
+                    content: {
+                        type: String
+                    },
+                    url: {
+                        type: String,
+                        observer: "_urlChange",
+                        value: ""
+                    },
+
+                    contentHtml: {
+                        type: String
+                    },
+                    isUrl: Boolean,
+                    phoneData: {
+                        type: Object,
+                        readOnly: true,
+                        value: {
+                            'iphone4s': {
+                                portrait: {
+                                    width: 320,
+                                    height: 480
+                                },
+                                landscape: {
+                                    height: 320,
+                                    width: 480
+                                },
+                                color: "silver"
+                            },
+                            'iphone5s': {
+                                portrait: {
+                                    width: 320,
+                                    height: 568
+                                },
+                                landscape: {
+                                    height: 320,
+                                    width: 568
+                                },
+                                color: "silver"
+                            },
+                            'iphone5c': {
+                                portrait: {
+                                    width: 320,
+                                    height: 568
+                                },
+                                landscape: {
+                                    height: 320,
+                                    width: 568
+                                },
+                                color: "silver"
+                            },
+                            'ipad': {
+                                portrait: {
+                                    width: 576,
+                                    height: 768
+                                },
+                                landscape: {
+                                    height: 576,
+                                    width: 768
+                                },
+                                color: "silver"
+                            },
+                            'nexus5': {
+                                portrait: {
+                                    width: 320,
+                                    height: 568
+                                },
+                                landscape: {
+                                    height: 320,
+                                    width: 568
+                                },
+                                color: ""
+                            },
+                            'iphone-x': {
+                                portrait: {
+                                    width: 375,
+                                    height: 812
+                                },
+                                landscape: {
+                                    height: 375,
+                                    width: 812
+                                },
+                                color: ""
+                            },
+                            'note8': {
+                                portrait: {
+                                    width: 400,
+                                    height: 822
+                                },
+                                landscape: {
+                                    height: 400,
+                                    width: 822
+                                },
+                                color: ""
+                            },
+                            'iphone8': {
+                                portrait: {
+                                    width: 375,
+                                    height: 677
+                                },
+                                landscape: {
+                                    height: 375,
+                                    width: 677
+                                },
+                                color: "silver"
+                            },
+                            'iphone8plus': {
+                                portrait: {
+                                    width: 414,
+                                    height: 736
+                                },
+                                landscape: {
+                                    height: 414,
+                                    width: 736
+                                },
+                                color: "silver"
+                            },
+                            'lumia920': {
+                                portrait: {
+                                    width: 320,
+                                    height: 533
+                                },
+                                landscape: {
+                                    height: 320,
+                                    width: 568
+                                },
+                                color: "yellow"
+                            },
+                        }
+                    },
+                    orientation: {
+                        type: String,
+                        value: "portrait",
+                        observer: "_changeOrientation"
+                    },
+                    deviceType: {
+                        type: String,
+                        value: "iphone-x"
+                    },
+                    closeMobileMode: {
+                        type: Boolean,
+                        notify: true
+                    },
+                    auto: {
+                        type: String
+                    }
+                };
+            }
+            static get observers() {
+                return [
+                    'deviceTypeChanged(deviceType)'
+                ]
+            }
+            deviceTypeChanged(d) {
+                console.log(d, this.auto)
+                if (this.auto !== undefined) {
+                    var resolvedPageUrl = this.resolveUrl("./" + d + '-view.html');
+                    Polymer.importHref(
+                        resolvedPageUrl,
+                        this._loadViewer.bind(this),
+                        this._fallbackSel.bind(this),
+                        true);
+                }
+
+            }
+
+            _urlChange() {
+                this.isUrl = true;
+            }
+
+            _fallbackSel() {
+                this.deviceType = "iphone5s";
+            }
+            _loadViewer() {
+                //console.log(this.deviceType + '-view');
+                //console.log(this._getCurrrentParams());
+                this.shadowRoot.querySelector(this.deviceType + '-view').loadView(this._getCurrrentParams());
+            }
+            reloadViewer() {
+                console.log('reloading');
+                this._loadViewer();
+            }
+            _getCurrrentParams() {
+                return {
+                    url: this.url,
+                    content: this.contentHtml,
+                    phoneData: this.phoneData[this.deviceType][this.orientation],
+                    isUrl: this._checkIsUrl(),
+                    orientation: this.orientation
+                }
+            }
+            loadViewer() {
+                var resolvedPageUrl = this.resolveUrl("./" + this.deviceType + '-view.html');
+                Polymer.importHref(
+                    resolvedPageUrl,
+                    this._loadViewer.bind(this),
+                    this._fallbackSel.bind(this),
+                    true);
+            }
+            _checkIsUrl() {
+                if (this.url.length > 0 || this.contentHtml !== undefined) {
+                    return (this.url.length > 0);
+                } else {
+                    console.error("Either ser URL or HTML Content");
+                }
+            }
+
+            _changeOrientation(o) {
+                console.log("or", o)
+                this.shadowRoot.querySelector(this.deviceType + '-view').orientation = "landscape";
+            }
+
+        }
+        window.customElements.define(DeviceViewer.is, DeviceViewer);
+    </script>
+</dom-module>

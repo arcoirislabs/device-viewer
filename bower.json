@@ -1,0 +1,17 @@
+{
+  "name": "device-viewer",
+  "description": "device-viewer element enables you to create a responsive view inside an iframe and applying skins of different devices inculding smartphones, tablets and desktop",
+  "main": "device-viewer.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
+  }
+}
